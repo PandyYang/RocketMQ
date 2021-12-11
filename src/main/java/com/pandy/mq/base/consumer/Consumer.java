@@ -28,16 +28,13 @@ public class Consumer {
 
         consumer.subscribe("base", "Tag2");
 
-        consumer.registerMessageListener(new MessageListenerConcurrently() {
-            // 接收消息内容的方法
-            @Override
-            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-                System.out.println(msgs);
-                for (MessageExt msg : msgs) {
-                    System.out.println("msg = " + new String(msg.getBody()));
-                }
-                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+        // 接收消息内容的方法
+        consumer.registerMessageListener((MessageListenerConcurrently) (msgs, context) -> {
+            System.out.println(msgs);
+            for (MessageExt msg : msgs) {
+                System.out.println("msg = " + new String(msg.getBody()));
             }
+            return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
         });
         consumer.start();
     }
